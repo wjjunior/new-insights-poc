@@ -11,7 +11,7 @@
     "allowJs": true /* Allow javascript files to be compiled. */,
     "rootDir": "src" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
     "noEmit": true /* Do not emit outputs. */,
-    "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
+    // "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
 
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,
@@ -25,7 +25,7 @@
     /* Advanced Options */
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
-    "resolveJsonModule": true,
-    "include": ["src"]
-  }
+    "resolveJsonModule": true
+  },
+  "include": ["src"]
 }
