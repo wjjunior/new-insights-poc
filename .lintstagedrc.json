@@ -1,5 +1,3 @@
 {
-    "*.{ts,vue}": [
-        "eslint 'src/**' --fix"
-    ]
+  "*.{ts,vue}": ["eslint 'src/**' --fix", "npm run test:staged"]
 }
