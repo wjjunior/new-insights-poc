@@ -1,28 +1,19 @@
 {
   "compilerOptions": {
-    /* Basic Options */
-    "target": "es6" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
-    "module": "ESNext" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
-    "lib": [
-      "dom",
-      "DOM.Iterable",
-      "ESNext"
-    ] /* Specify library files to be included in the compilation. */,
-    "allowJs": true /* Allow javascript files to be compiled. */,
-    "rootDir": "src" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
-    // "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
-
-    /* Module Resolution Options */
-    "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
     "jsx": "preserve",
-    "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
+    "rootDir": "src",
+    "baseUrl": "src",
     "paths": {
       "@/*": ["*"]
     },
-    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
-
-    /* Advanced Options */
+    "allowJs": true,
     "resolveJsonModule": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/main/test/cypress"]
 }
