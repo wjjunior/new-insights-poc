@@ -1,5 +1,6 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = {
   mode: "development",
@@ -18,9 +19,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        exclude: /node_modules/,
+        test: /\.tsx?$/,
         loader: "ts-loader",
+        exclude: /node_modules/,
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
       },
       {
         test: /\.vue$/,
@@ -34,9 +38,6 @@ module.exports = {
           },
           {
             loader: "css-loader",
-            options: {
-              modules: true,
-            },
           },
           {
             loader: "sass-loader",
@@ -53,5 +54,5 @@ module.exports = {
   externals: {
     vue: "Vue",
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [new CleanWebpackPlugin(), new VueLoaderPlugin()],
 };
