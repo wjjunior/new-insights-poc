@@ -10,10 +10,40 @@ module.exports = {
     filename: "bundle.js",
   },
   resolve: {
-    extensions: [".ts", ".js", ".vue"],
+    extensions: [".ts", ".js", ".vue", ".scss"],
     alias: {
       "@": path.join(__dirname, "src"),
     },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        loader: "ts-loader",
+      },
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader",
+          },
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          {
+            loader: "sass-loader",
+          },
+        ],
+      },
+    ],
   },
   devServer: {
     contentBase: "./public",
