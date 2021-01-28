@@ -1,4 +1,5 @@
 import { createApp } from "vue";
-import { Login } from "@/presentation/pages";
+import { Router, Login } from "@/presentation/pages";
+import '@/presentation/styles/global.scss'
 
-createApp(Login).mount("#main");
+createApp(Login).use(Router).mount("#main");
