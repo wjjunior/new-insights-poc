@@ -21,10 +21,7 @@
           Entrar
         </button>
         <span class="link">Criar conta</span>
-        <div class="errorWrap">
-          <Spinner />
-          <span class="error">Erro</span>
-        </div>
+        <FormStatus />
       </form>
       <Footer />
     </div>
@@ -32,18 +29,18 @@
 </template>
 
 <script>
-import Spinner from '@/presentation/components/spinner/spinner.vue';
 import LoginHeader from '@/presentation/components/login-header/login-header.vue';
 import Footer from '@/presentation/components/footer/footer.vue';
 import Input from '@/presentation/components/input/input.vue';
+import FormStatus from '@/presentation/components/form-status/form-status.vue';
 
 export default {
   name: "Login",
   components: {
-    Spinner,
     LoginHeader,
     Footer,
-    Input
+    Input,
+    FormStatus
   },
 };
 </script>
