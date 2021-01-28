@@ -8,6 +8,8 @@
       :value="value"
       :class="state"
       :placeholder="placeholder"
+      :onFocus="() => readonly = false"
+      :readonly="readonly"
       @input="onInput($event.target.value)"
       @focus="onFocus($event.target.value)"
     >
@@ -25,7 +27,7 @@ export default defineComponent({
       type: String,
       default: "text",
       validator: (value: string) => {
-        return ["text", "email", "number"].indexOf(value) !== -1;
+        return ["text", "email", "number", "password"].indexOf(value) !== -1;
       },
     },
     value: {
@@ -57,12 +59,18 @@ export default defineComponent({
     },
   },
   emits: ["change", "focus"],
+  data() {
+    return { readonly: true as Boolean };
+  },
   methods: {
     onInput(value: any) {
       this.$emit("change", value);
     },
-    onFocus(value) {
+    onFocus(value: any) {
       this.$emit("focus", value);
+    },
+    enableInput(event: any) {
+      event.target.readonly = false;
     },
   },
 });
