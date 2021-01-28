@@ -5,6 +5,7 @@ module.exports = {
   testEnvironment: "jsdom",
   transform: {
     ".+\\.ts$": "ts-jest",
+    "^.+\\.vue$": "vue-jest",
   },
   moduleNameMapper: {
     "@/(.*)": "<rootDir>/src/$1",
