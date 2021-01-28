@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="login">
-      <header class="header">
-        <logo />
-      </header>
+      <LoginHeader />
       <form class="form">
         <h2>Login</h2>
         <div class="inputWrap">
@@ -30,24 +28,26 @@
         </button>
         <span class="link">Criar conta</span>
         <div class="errorWrap">
-          <spinner />
+          <Spinner />
           <span class="error">Erro</span>
         </div>
       </form>
-      <footer class="footer" />
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
 import Spinner from '@/presentation/components/spinner/spinner.vue';
-import Logo from '@/presentation/components/logo/logo.vue';
+import LoginHeader from '@/presentation/components/login-header/login-header.vue';
+import Footer from '@/presentation/components/footer/footer.vue';
 
 export default {
   name: "Login",
   components: {
     Spinner,
-    Logo
+    LoginHeader,
+    Footer
   },
 };
 </script>
