@@ -4,22 +4,16 @@
       <LoginHeader />
       <form class="form">
         <h2>Login</h2>
-        <div class="inputWrap">
-          <input
-            type="email"
-            name="email"
-            placeholder="Digite seu e-mail"
-          >
-          <span class="status">🔴</span>
-        </div>
-        <div class="inputWrap">
-          <input
-            type="password"
-            name="password"
-            placeholder="Digite sua senha"
-          >
-          <span class="status">🔴</span>
-        </div>
+        <Input
+          type="email"
+          name="email"
+          placeholder="Digite seu e-mail"
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Digite sua senha"
+        />
         <button
           type="submit"
           class="submit"
@@ -41,13 +35,15 @@
 import Spinner from '@/presentation/components/spinner/spinner.vue';
 import LoginHeader from '@/presentation/components/login-header/login-header.vue';
 import Footer from '@/presentation/components/footer/footer.vue';
+import Input from '@/presentation/components/input/input.vue';
 
 export default {
   name: "Login",
   components: {
     Spinner,
     LoginHeader,
-    Footer
+    Footer,
+    Input
   },
 };
 </script>
