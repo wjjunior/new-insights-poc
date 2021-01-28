@@ -29,10 +29,10 @@
 </template>
 
 <script>
-import LoginHeader from '@/presentation/components/login-header/login-header.vue';
-import Footer from '@/presentation/components/footer/footer.vue';
-import Input from '@/presentation/components/input/input.vue';
-import FormStatus from '@/presentation/components/form-status/form-status.vue';
+import LoginHeader from "@/presentation/components/login-header/login-header";
+import Footer from "@/presentation/components/footer/footer";
+import Input from "@/presentation/components/input/input";
+import FormStatus from "@/presentation/components/form-status/form-status";
 
 export default {
   name: "Login",
@@ -40,7 +40,7 @@ export default {
     LoginHeader,
     Footer,
     Input,
-    FormStatus
+    FormStatus,
   },
 };
 </script>
