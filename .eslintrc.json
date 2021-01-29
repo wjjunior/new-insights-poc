@@ -6,9 +6,10 @@
   },
   "extends": [
     "standard-with-typescript",
-    "prettier",
-    "prettier/@typescript-eslint",
-    "plugin:vue/vue3-recommended"
+    "plugin:vue/vue3-recommended",
+    "@vue/prettier/@typescript-eslint",
+    "@vue/prettier",
+    "@vue/prettier/@typescript-eslint"
   ],
   "plugins": ["vue"],
   "parser": "vue-eslint-parser",
