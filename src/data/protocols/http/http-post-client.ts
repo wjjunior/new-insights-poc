@@ -1,4 +1,4 @@
-import { HttpResponse } from ".";
+import { HttpResponse } from '.'
 
 export interface HttpPostParams<T> {
   url: string;
