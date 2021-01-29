@@ -13,7 +13,7 @@
       @input="onInput($event.target.value)"
       @focus="onFocus($event.target.value)"
     >
-    <span class="status">🔴</span>
+    <span :data-testid="testId" :title="error" class="status">🔴</span>
   </div>
 </template>
 
@@ -56,6 +56,14 @@ export default defineComponent({
       validator: (value: string) => {
         return ['hover', 'active', 'focus'].indexOf(value) !== -1
       }
+    },
+    error: {
+      type: String,
+      default: ''
+    },
+    testId: {
+      type: String,
+      default: ''
     }
   },
   emits: ['change', 'focus'],
