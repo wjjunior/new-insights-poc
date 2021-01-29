@@ -5,15 +5,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import Logo from "@/presentation/components/logo/logo.vue";
+import { defineComponent } from 'vue'
+import Logo from '@/presentation/components/logo/logo.vue'
 
 export default defineComponent({
-  name: "LoginHeader",
+  name: 'LoginHeader',
   components: {
-      Logo
-  },
-});
+    Logo
+  }
+})
 </script>
 
 <style lang="scss">

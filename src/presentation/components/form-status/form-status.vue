@@ -1,20 +1,30 @@
 <template>
-  <div class="errorWrap">
-    <Spinner />
-    <span class="error">Erro</span>
+  <div data-testid="error-wrap" class="errorWrap">
+    <template v-if="isLoading">
+      <Spinner />
+    </template>
+    <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import Spinner from "@/presentation/components/spinner/spinner.vue";
+import { computed, defineComponent } from 'vue'
+import { useStore } from 'vuex'
+import Spinner from '@/presentation/components/spinner/spinner.vue'
 
 export default defineComponent({
-  name: "FormStatus",
+  name: 'FormStatus',
   components: {
-    Spinner,
+    Spinner
   },
-});
+  setup () {
+    const store = useStore()
+    return {
+      isLoading: computed(() => store.state.Auth.isLoading),
+      errorMessage: computed(() => store.state.Auth.errorMessage)
+    }
+  }
+})
 </script>
 
 <style lang="scss">

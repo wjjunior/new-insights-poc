@@ -3,12 +3,7 @@ module.exports = {
   collectCoverageFrom: ["<rootDir>/src/**/*.{ts,vue}", "!**/*.d.ts"],
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
-  moduleFileExtensions: [
-    "js",
-    "ts",
-    "json",
-    "vue"
-  ],
+  moduleFileExtensions: ["js", "ts", "json", "vue"],
   transform: {
     ".+\\.ts$": "ts-jest",
     "^.+\\.vue$": "vue-jest",

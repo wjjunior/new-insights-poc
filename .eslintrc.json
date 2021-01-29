@@ -5,11 +5,9 @@
     }
   },
   "extends": [
-    "standard-with-typescript",
-    "plugin:vue/vue3-recommended",
-    "@vue/prettier/@typescript-eslint",
-    "@vue/prettier",
-    "@vue/prettier/@typescript-eslint"
+    "plugin:vue/vue3-essential",
+    "@vue/standard",
+    "@vue/typescript/recommended"
   ],
   "plugins": ["vue"],
   "parser": "vue-eslint-parser",
@@ -29,6 +27,8 @@
     "@typescript-eslint/camelcase": "off",
     "no-redeclare": "off",
     "import/export": "off",
-    "vue/jsx-uses-vars": "error"
+    "vue/jsx-uses-vars": "error",
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-useless-constructor": ["error"]
   }
 }
