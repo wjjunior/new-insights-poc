@@ -49,11 +49,16 @@ const simulateStatusForField = (
   validationError?: string
 ): void => {
   const emailStatus = sut.get(`[data-test="${fieldName}-status"]`)
-  expect(emailStatus.attributes('title')).toBe(validationError || 'Tudo certo!')
+  expect(emailStatus.attributes('title')).toBe(
+    validationError || 'Tudo certo!'
+  )
   expect(emailStatus.element.textContent).toBe(validationError ? '🔴' : '🟢')
 }
 
 describe('Login Component', () => {
+  beforeEach(() => {
+    store.dispatch('reset')
+  })
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
@@ -124,5 +129,13 @@ describe('Login Component', () => {
       email,
       password
     })
+  })
+
+  test('Should call authentication only once', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    simulateValidSubmit(sut)
+    simulateValidSubmit(sut)
+    await sut.vm.$nextTick()
+    expect(authenticationSpy.callsCount).toBe(1)
   })
 })
