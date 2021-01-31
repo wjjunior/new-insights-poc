@@ -1,11 +1,12 @@
 import { mount, VueWrapper } from '@vue/test-utils'
 import faker from 'faker'
 import flushPromises from 'flush-promises'
-import Login from './login.vue'
+import 'jest-localstorage-mock'
 import { store } from '@/presentation/store'
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
 import { InvalidCredentialsError } from '@/domain/errors'
+import { Router as router, Login } from '@/presentation/pages'
 
 type SutTypes = {
   sut: VueWrapper<ComponentPublicInstance>;
@@ -26,7 +27,7 @@ const makeSut = (params?: SutParams): SutTypes => {
       authentication: authenticationSpy
     },
     global: {
-      plugins: [store]
+      plugins: [store, router]
     }
   })
   return {
@@ -35,14 +36,15 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
-const simulateValidSubmit = (
+const simulateValidSubmit = async (
   sut: VueWrapper<ComponentPublicInstance>,
   email = faker.internet.email(),
   password = faker.internet.password()
-): void => {
+): Promise<void> => {
   sut.setData({ email })
   sut.setData({ password })
   sut.get('[data-test="submit"]').trigger('click')
+  await sut.vm.$nextTick()
 }
 
 const simulateStatusForField = (
@@ -60,6 +62,7 @@ const simulateStatusForField = (
 describe('Login Component', () => {
   beforeEach(() => {
     store.dispatch('reset')
+    localStorage.clear()
   })
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
@@ -115,8 +118,7 @@ describe('Login Component', () => {
 
   test('Should show spinner on submit', async () => {
     const { sut } = makeSut()
-    simulateValidSubmit(sut)
-    await sut.vm.$nextTick()
+    await simulateValidSubmit(sut)
     const spinner = sut.get('[data-test="spinner"]').element
     expect(spinner).toBeTruthy()
   })
@@ -125,8 +127,7 @@ describe('Login Component', () => {
     const { sut, authenticationSpy } = makeSut()
     const email = faker.internet.email()
     const password = faker.internet.password()
-    simulateValidSubmit(sut, email, password)
-    await sut.vm.$nextTick()
+    await simulateValidSubmit(sut, email, password)
     expect(authenticationSpy.params).toEqual({
       email,
       password
@@ -135,16 +136,14 @@ describe('Login Component', () => {
 
   test('Should call authentication only once', async () => {
     const { sut, authenticationSpy } = makeSut()
-    simulateValidSubmit(sut)
-    simulateValidSubmit(sut)
-    await sut.vm.$nextTick()
+    await simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
   test('Should not call authentication when form is invalid', async () => {
     const validationError = faker.random.words()
     const { sut, authenticationSpy } = makeSut({ validationError })
-    await sut.vm.$nextTick()
     sut.get('[data-test="submit"]').trigger('click')
     expect(authenticationSpy.callsCount).toBe(0)
   })
@@ -152,14 +151,26 @@ describe('Login Component', () => {
   test('Should show error if Authentication fails', async () => {
     const { sut, authenticationSpy } = makeSut()
     const error = new InvalidCredentialsError()
-    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
-    simulateValidSubmit(sut)
-    await sut.vm.$nextTick()
+    jest
+      .spyOn(authenticationSpy, 'auth')
+      .mockReturnValueOnce(Promise.reject(error))
+    await simulateValidSubmit(sut)
     await flushPromises()
     const mainError = sut.get('[data-test="main-error"]')
     sut.get('[data-test="submit"]').trigger('click')
     expect(mainError.element.textContent).toBe(error.message)
     const errorWrap = sut.get('[data-test="error-wrap"]')
     expect(errorWrap.element.childElementCount).toBe(1)
+  })
+
+  test('Should add accessToken to localstorage on success', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    await simulateValidSubmit(sut)
+    await flushPromises()
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'accessToken',
+      authenticationSpy.account.accessToken
+    )
+    expect(sut.vm.$route.path).toBe('/')
   })
 })
