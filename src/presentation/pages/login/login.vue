@@ -47,9 +47,8 @@ import {
 import { Validation } from '@/presentation/protocols/validation'
 
 type dataParams = {
-  email: string,
-  password: string,
-  passwordError: string;
+  email: string;
+  password: string;
 };
 
 export default {
@@ -63,8 +62,7 @@ export default {
   data (): dataParams {
     return {
       email: '',
-      password: '',
-      passwordError: 'Campo obrigatório'
+      password: ''
     }
   },
   props: {
@@ -82,11 +80,9 @@ export default {
   computed: {
     emailError: function (): string {
       return this.validation.validate('email', this.email)
-    }
-  },
-  watch: {
-    password: function (password: string): void {
-      this.validation.validate('password', password)
+    },
+    passwordError: function (): string {
+      return this.validation.validate('password', this.password)
     }
   }
 }
