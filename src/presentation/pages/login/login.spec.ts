@@ -60,4 +60,14 @@ describe('Login Component', () => {
     expect(passwordStatus.attributes('title')).toBe(validationStub.errorMessage)
     expect(passwordStatus.element.textContent).toBe('🔴')
   })
+
+  test('Should show valid password state if Validation success', async () => {
+    const { sut, validationStub } = makeSut()
+    validationStub.errorMessage = null
+    sut.setData({ password: faker.internet.password() })
+    await sut.vm.$nextTick()
+    const passwordStatus = sut.get('[data-test="password-status"]')
+    expect(passwordStatus.attributes('title')).toBe('Tudo certo!')
+    expect(passwordStatus.element.textContent).toBe('🟢')
+  })
 })
