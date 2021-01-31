@@ -61,6 +61,16 @@ describe('Login Component', () => {
     expect(passwordStatus.element.textContent).toBe('🔴')
   })
 
+  test('Should show valid email state if Validation success', async () => {
+    const { sut, validationStub } = makeSut()
+    validationStub.errorMessage = null
+    sut.setData({ email: faker.internet.email() })
+    await sut.vm.$nextTick()
+    const emailStatus = sut.get('[data-test="email-status"]')
+    expect(emailStatus.attributes('title')).toBe('Tudo certo!')
+    expect(emailStatus.element.textContent).toBe('🟢')
+  })
+
   test('Should show valid password state if Validation success', async () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = null
