@@ -4,9 +4,31 @@
       <LoginHeader />
       <form class="form">
         <h2>Login</h2>
-        <Input type="email" name="email" placeholder="Digite seu e-mail" :error="emailError" testId="email-status"/>
-        <Input type="password" name="password" placeholder="Digite sua senha" :error="passwordError" testId="password-status" />
-        <button data-testid="submit" disabled type="button" class="submit" @click="login">Entrar</button>
+        <Input
+          type="email"
+          name="email"
+          placeholder="Digite seu e-mail"
+          :error="emailError"
+          testId="email-status"
+          v-model:value="email"
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Digite sua senha"
+          :error="passwordError"
+          testId="password-status"
+          v-model:value="password"
+        />
+        <button
+          data-test="submit"
+          disabled
+          type="button"
+          class="submit"
+          @click="login"
+        >
+          Entrar
+        </button>
         <span class="link">Criar conta</span>
         <FormStatus />
       </form>
@@ -22,11 +44,14 @@ import {
   Input,
   FormStatus
 } from '@/presentation/components'
+import { Validation } from '@/presentation/protocols/validation'
 
 type dataParams = {
-  emailError: string,
-  passwordError: string
-}
+  email: string,
+  password: string,
+  emailError: string;
+  passwordError: string;
+};
 
 export default {
   name: 'Login',
@@ -38,8 +63,15 @@ export default {
   },
   data (): dataParams {
     return {
+      email: '',
+      password: '',
       emailError: 'Campo obrigatório',
       passwordError: 'Campo obrigatório'
+    }
+  },
+  props: {
+    validation: {
+      type: Object as () => Validation
     }
   },
   methods: {
@@ -47,6 +79,11 @@ export default {
       this.$store
         .dispatch('LOGIN', { email: 'teste@gmail.com', password: '12345678' })
         .then((res) => console.log('Logged', res))
+    }
+  },
+  watch: {
+    email: function (value: string): void {
+      this.validation.validate({ email: value })
     }
   }
 }

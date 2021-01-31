@@ -1,5 +1,5 @@
 <template>
-  <div data-testid="error-wrap" class="errorWrap">
+  <div data-test="error-wrap" class="errorWrap">
     <template v-if="isLoading">
       <Spinner />
     </template>

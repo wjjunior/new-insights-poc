@@ -12,8 +12,9 @@
       :readonly="readonly"
       @input="onInput($event.target.value)"
       @focus="onFocus($event.target.value)"
+      :data-test="name"
     >
-    <span :data-testid="testId" :title="error" class="status">🔴</span>
+    <span :data-test="testId" :title="error" class="status">🔴</span>
   </div>
 </template>
 
@@ -66,13 +67,13 @@ export default defineComponent({
       default: ''
     }
   },
-  emits: ['change', 'focus'],
+  emits: ['change', 'focus', 'update:value'],
   data () {
     return { readonly: true as boolean }
   },
   methods: {
     onInput (value: any) {
-      this.$emit('change', value)
+      this.$emit('update:value', value)
     },
     onFocus (value: any) {
       this.$emit('focus', value)
