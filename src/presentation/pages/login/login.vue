@@ -46,6 +46,7 @@ import {
 } from '@/presentation/components'
 import { Validation } from '@/presentation/protocols/validation'
 import { Authentication } from '@/domain/usecases'
+import { mapGetters } from 'vuex'
 
 type dataParams = {
   email: string;
@@ -76,7 +77,10 @@ export default {
   },
   methods: {
     async handleSubmit (): Promise<void> {
-      this.$store.commit('SET_LOADING', true)
+      if (this.isLoading) {
+        return
+      }
+      this.$store.commit('Auth/SET_LOADING', true)
       await this.authentication.auth({ email: this.email, password: this.password })
     }
   },
@@ -86,6 +90,9 @@ export default {
     },
     passwordError: function (): string {
       return this.validation.validate('password', this.password)
+    },
+    isLoading (): boolean {
+      return this.$store.state.Auth.isLoading
     }
   }
 }
