@@ -49,7 +49,6 @@ import { Validation } from '@/presentation/protocols/validation'
 type dataParams = {
   email: string,
   password: string,
-  emailError: string;
   passwordError: string;
 };
 
@@ -65,7 +64,6 @@ export default {
     return {
       email: '',
       password: '',
-      emailError: 'Campo obrigatório',
       passwordError: 'Campo obrigatório'
     }
   },
@@ -81,10 +79,12 @@ export default {
         .then((res) => console.log('Logged', res))
     }
   },
+  computed: {
+    emailError: function (): string {
+      return this.validation.validate('email', this.email)
+    }
+  },
   watch: {
-    email: function (email: string): void {
-      this.validation.validate('email', email)
-    },
     password: function (password: string): void {
       this.validation.validate('password', password)
     }
