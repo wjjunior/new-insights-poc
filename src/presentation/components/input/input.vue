@@ -13,8 +13,10 @@
       @input="onInput($event.target.value)"
       @focus="onFocus($event.target.value)"
       :data-test="name"
-    >
-    <span :data-test="testId" :title="error" class="status">🔴</span>
+    />
+    <span :data-test="testId" :title="title" class="status">{{
+      status
+    }}</span>
   </div>
 </template>
 
@@ -80,6 +82,14 @@ export default defineComponent({
     },
     enableInput (event: any) {
       event.target.readonly = false
+    }
+  },
+  computed: {
+    status: function (): string {
+      return this.error ? '🔴' : '🟢'
+    },
+    title: function (): string {
+      return this.error || 'Tudo certo!'
     }
   }
 })
