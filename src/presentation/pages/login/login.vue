@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     async handleSubmit (): Promise<void> {
-      if (this.isLoading) {
+      if (this.isLoading || this.emailError || this.passwordError) {
         return
       }
       this.$store.commit('Auth/SET_LOADING', true)
