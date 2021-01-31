@@ -82,10 +82,11 @@ export default {
           return
         }
         this.$store.commit('Auth/SET_LOADING', true)
-        await this.authentication.auth({
+        const account = await this.authentication.auth({
           email: this.email,
           password: this.password
         })
+        localStorage.setItem('accessToken', account.accessToken)
       } catch (error) {
         this.$store.commit('Auth/SET_LOADING', false)
         this.$store.commit('Auth/SET_ERROR_MESSAGE', error.message)
