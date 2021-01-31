@@ -138,4 +138,12 @@ describe('Login Component', () => {
     await sut.vm.$nextTick()
     expect(authenticationSpy.callsCount).toBe(1)
   })
+
+  test('Should not call authentication when form is invalid', async () => {
+    const validationError = faker.random.words()
+    const { sut, authenticationSpy } = makeSut({ validationError })
+    await sut.vm.$nextTick()
+    sut.get('[data-test="submit"]').trigger('click')
+    expect(authenticationSpy.callsCount).toBe(0)
+  })
 })
