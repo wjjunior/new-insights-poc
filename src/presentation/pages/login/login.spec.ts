@@ -1,9 +1,11 @@
 import { mount, VueWrapper } from '@vue/test-utils'
 import faker from 'faker'
+import flushPromises from 'flush-promises'
 import Login from './login.vue'
 import { store } from '@/presentation/store'
 import { ValidationStub, AuthenticationSpy } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
+import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutTypes = {
   sut: VueWrapper<ComponentPublicInstance>;
@@ -145,5 +147,19 @@ describe('Login Component', () => {
     await sut.vm.$nextTick()
     sut.get('[data-test="submit"]').trigger('click')
     expect(authenticationSpy.callsCount).toBe(0)
+  })
+
+  test('Should show error if Authentication fails', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const error = new InvalidCredentialsError()
+    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
+    simulateValidSubmit(sut)
+    await sut.vm.$nextTick()
+    await flushPromises()
+    const mainError = sut.get('[data-test="main-error"]')
+    sut.get('[data-test="submit"]').trigger('click')
+    expect(mainError.element.textContent).toBe(error.message)
+    const errorWrap = sut.get('[data-test="error-wrap"]')
+    expect(errorWrap.element.childElementCount).toBe(1)
   })
 })
