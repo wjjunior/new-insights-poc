@@ -7,10 +7,12 @@ import { ComponentPublicInstance } from 'vue'
 
 class ValidationSpy implements Validation {
   errorMessage: string;
-  input: Record<string, unknown>;
+  fieldName: string;
+  fieldValue: string;
 
-  validate (input: Record<string, unknown>): string {
-    this.input = input
+  validate (fieldName: string, fieldValue: string): string {
+    this.fieldName = fieldName
+    this.fieldValue = fieldValue
 
     return this.errorMessage
   }
@@ -57,17 +59,15 @@ describe('Login Component', () => {
     const { sut, validationSpy } = makeSut()
     sut.setData({ email: 'any_email' })
     await sut.vm.$nextTick()
-    expect(validationSpy.input).toEqual({
-      email: 'any_email'
-    })
+    expect(validationSpy.fieldName).toEqual('email')
+    expect(validationSpy.fieldValue).toEqual('any_email')
   })
 
   test('Should call validation with correct password', async () => {
     const { sut, validationSpy } = makeSut()
     sut.setData({ password: 'any_password' })
     await sut.vm.$nextTick()
-    expect(validationSpy.input).toEqual({
-      password: 'any_password'
-    })
+    expect(validationSpy.fieldName).toEqual('password')
+    expect(validationSpy.fieldValue).toEqual('any_password')
   })
 })
