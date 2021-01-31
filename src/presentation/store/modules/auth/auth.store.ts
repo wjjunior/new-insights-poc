@@ -15,22 +15,27 @@ const state: State = initialState()
 enum MutationType {
   Reset = 'RESET',
   SetLoading = 'SET_LOADING',
+  SetErrorMessage = 'SET_ERROR_MESSAGE'
 }
 
 type Mutations = {
-  [MutationType.SetLoading](state: State, value: boolean): void;
   [MutationType.Reset](state: State): void;
+  [MutationType.SetLoading](state: State, value: boolean): void;
+  [MutationType.SetErrorMessage](state: State, value: string): void;
 };
 
 const mutations: MutationTree<State> & Mutations = {
-  [MutationType.SetLoading] (state, value) {
-    state.isLoading = value
-  },
   [MutationType.Reset] (state) {
     const newState = initialState()
     Object.keys(newState).forEach((key) => {
       state[key] = newState[key]
     })
+  },
+  [MutationType.SetLoading] (state, value) {
+    state.isLoading = value
+  },
+  [MutationType.SetErrorMessage] (state, value) {
+    state.errorMessage = value
   }
 }
 

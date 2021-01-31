@@ -3,7 +3,7 @@
     <template v-if="isLoading">
       <Spinner />
     </template>
-    <span v-if="errorMessage" class="error">{{ errorMessage }}</span>
+    <span v-if="errorMessage" class="error" data-test="main-error">{{ errorMessage }}</span>
   </div>
 </template>
 

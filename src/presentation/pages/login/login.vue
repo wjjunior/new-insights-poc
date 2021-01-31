@@ -77,11 +77,19 @@ export default {
   },
   methods: {
     async handleSubmit (): Promise<void> {
-      if (this.isLoading || this.emailError || this.passwordError) {
-        return
+      try {
+        if (this.isLoading || this.emailError || this.passwordError) {
+          return
+        }
+        this.$store.commit('Auth/SET_LOADING', true)
+        await this.authentication.auth({
+          email: this.email,
+          password: this.password
+        })
+      } catch (error) {
+        this.$store.commit('Auth/SET_LOADING', false)
+        this.$store.commit('Auth/SET_ERROR_MESSAGE', error.message)
       }
-      this.$store.commit('Auth/SET_LOADING', true)
-      await this.authentication.auth({ email: this.email, password: this.password })
     }
   },
   computed: {
