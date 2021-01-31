@@ -93,4 +93,14 @@ describe('Login Component', () => {
       .element as HTMLButtonElement
     expect(submitButton.disabled).toBe(false)
   })
+
+  test('Should show spinner on submit', async () => {
+    const { sut } = makeSut()
+    sut.setData({ email: faker.internet.email() })
+    sut.setData({ password: faker.internet.password() })
+    sut.get('[data-test="submit"]').trigger('click')
+    await sut.vm.$nextTick()
+    const spinner = sut.get('[data-test="spinner"]').element
+    expect(spinner).toBeTruthy()
+  })
 })
