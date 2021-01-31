@@ -22,7 +22,7 @@
         />
         <button
           data-test="submit"
-          disabled
+          :disabled="!!emailError || !!passwordError"
           type="button"
           class="submit"
           @click="login"
