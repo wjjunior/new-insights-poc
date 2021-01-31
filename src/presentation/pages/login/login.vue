@@ -2,7 +2,7 @@
   <div>
     <div class="login">
       <LoginHeader />
-      <form class="form" @submit="handleSubmit">
+      <form class="form">
         <h2>Login</h2>
         <Input
           type="email"
@@ -23,9 +23,9 @@
         <button
           data-test="submit"
           :disabled="!!emailError || !!passwordError"
-          type="submit"
+          type="button"
           class="submit"
-          @click="login"
+          @click="handleSubmit"
         >
           Entrar
         </button>
@@ -45,7 +45,7 @@ import {
   FormStatus
 } from '@/presentation/components'
 import { Validation } from '@/presentation/protocols/validation'
-import store from '@/presentation/store'
+import { Authentication } from '@/domain/usecases'
 
 type dataParams = {
   email: string;
@@ -69,17 +69,15 @@ export default {
   props: {
     validation: {
       type: Object as () => Validation
+    },
+    authentication: {
+      type: Object as () => Authentication
     }
   },
   methods: {
-    login (): void {
-      this.$store
-        .dispatch('LOGIN', { email: 'teste@gmail.com', password: '12345678' })
-        .then((res) => console.log('Logged', res))
-    },
-    handleSubmit (event: KeyboardEvent): void {
-      event.preventDefault()
-      store.commit('SET_LOADING', true)
+    async handleSubmit (): Promise<void> {
+      this.$store.commit('SET_LOADING', true)
+      await this.authentication.auth({ email: this.email, password: this.password })
     }
   },
   computed: {
