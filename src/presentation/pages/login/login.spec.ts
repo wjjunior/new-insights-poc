@@ -4,9 +4,23 @@ import Login from './login.vue'
 import { store } from '@/presentation/store'
 import { ValidationStub } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
+import { Authentication, AuthenticationParams } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
+
+class AuthenticationSpy implements Authentication {
+  account = mockAccountModel()
+  params: AuthenticationParams
+
+  async auth (params: AuthenticationParams): Promise<AccountModel> {
+    this.params = params
+    return Promise.resolve(this.account)
+  }
+}
 
 type SutTypes = {
-  sut: VueWrapper<ComponentPublicInstance>;
+  sut: VueWrapper<ComponentPublicInstance>
+  authenticationSpy: AuthenticationSpy
 };
 
 type SutParams = {
@@ -15,17 +29,20 @@ type SutParams = {
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
+  const authenticationSpy = new AuthenticationSpy()
   validationStub.errorMessage = params?.validationError
   const sut = mount(Login, {
     props: {
-      validation: validationStub
+      validation: validationStub,
+      authentication: authenticationSpy
     },
     global: {
       plugins: [store]
     }
   })
   return {
-    sut
+    sut,
+    authenticationSpy
   }
 }
 
@@ -98,9 +115,24 @@ describe('Login Component', () => {
     const { sut } = makeSut()
     sut.setData({ email: faker.internet.email() })
     sut.setData({ password: faker.internet.password() })
-    sut.get('[data-test="submit"]').trigger('click')
+    const button = sut.get('[data-test="submit"]')
+    button.trigger('click')
     await sut.vm.$nextTick()
     const spinner = sut.get('[data-test="spinner"]').element
     expect(spinner).toBeTruthy()
+  })
+
+  test('Should call authentication with correct values', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const email = faker.internet.email()
+    sut.setData({ email })
+    const password = faker.internet.password()
+    sut.setData({ password })
+    sut.get('[data-test="submit"]').trigger('click')
+    await sut.vm.$nextTick()
+    expect(authenticationSpy.params).toEqual({
+      email,
+      password
+    })
   })
 })
