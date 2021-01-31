@@ -2,21 +2,8 @@ import { mount, VueWrapper } from '@vue/test-utils'
 
 import Login from './login.vue'
 import { store } from '@/presentation/store'
-import { Validation } from '@/presentation/protocols/validation'
+import { ValidationSpy } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
-
-class ValidationSpy implements Validation {
-  errorMessage: string;
-  fieldName: string;
-  fieldValue: string;
-
-  validate (fieldName: string, fieldValue: string): string {
-    this.fieldName = fieldName
-    this.fieldValue = fieldValue
-
-    return this.errorMessage
-  }
-}
 
 type SutTypes = {
   sut: VueWrapper<ComponentPublicInstance>;
