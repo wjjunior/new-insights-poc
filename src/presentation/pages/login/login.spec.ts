@@ -6,13 +6,13 @@ import { ValidationStub, AuthenticationSpy } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
 
 type SutTypes = {
-  sut: VueWrapper<ComponentPublicInstance>
-  authenticationSpy: AuthenticationSpy
+  sut: VueWrapper<ComponentPublicInstance>;
+  authenticationSpy: AuthenticationSpy;
 };
 
 type SutParams = {
-  validationError: string
-}
+  validationError: string;
+};
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
@@ -33,6 +33,26 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
+const simulateValidSubmit = (
+  sut: VueWrapper<ComponentPublicInstance>,
+  email = faker.internet.email(),
+  password = faker.internet.password()
+): void => {
+  sut.setData({ email })
+  sut.setData({ password })
+  sut.get('[data-test="submit"]').trigger('click')
+}
+
+const simulateStatusForField = (
+  sut: VueWrapper<ComponentPublicInstance>,
+  fieldName: string,
+  validationError?: string
+): void => {
+  const emailStatus = sut.get(`[data-test="${fieldName}-status"]`)
+  expect(emailStatus.attributes('title')).toBe(validationError || 'Tudo certo!')
+  expect(emailStatus.element.textContent).toBe(validationError ? '🔴' : '🟢')
+}
+
 describe('Login Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
@@ -42,12 +62,8 @@ describe('Login Component', () => {
     const submitButton = sut.get('[data-test="submit"]')
       .element as HTMLButtonElement
     expect(submitButton.disabled).toBe(true)
-    const emailStatus = sut.get('[data-test="email-status"]')
-    expect(emailStatus.attributes('title')).toBe(validationError)
-    expect(emailStatus.element.textContent).toBe('🔴')
-    const passwordStatus = sut.get('[data-test="password-status"]')
-    expect(passwordStatus.attributes('title')).toBe(validationError)
-    expect(passwordStatus.element.textContent).toBe('🔴')
+    simulateStatusForField(sut, 'email', validationError)
+    simulateStatusForField(sut, 'password', validationError)
   })
 
   test('Should show email error if Validation fails', async () => {
@@ -55,9 +71,7 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
     sut.setData({ email: faker.internet.email() })
     await sut.vm.$nextTick()
-    const emailStatus = sut.get('[data-test="email-status"]')
-    expect(emailStatus.attributes('title')).toBe(validationError)
-    expect(emailStatus.element.textContent).toBe('🔴')
+    simulateStatusForField(sut, 'email', validationError)
   })
 
   test('Should show password error if Validation fails', async () => {
@@ -65,27 +79,21 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
     sut.setData({ password: faker.internet.password() })
     await sut.vm.$nextTick()
-    const passwordStatus = sut.get('[data-test="password-status"]')
-    expect(passwordStatus.attributes('title')).toBe(validationError)
-    expect(passwordStatus.element.textContent).toBe('🔴')
+    simulateStatusForField(sut, 'password', validationError)
   })
 
   test('Should show valid email state if Validation success', async () => {
     const { sut } = makeSut()
     sut.setData({ email: faker.internet.email() })
     await sut.vm.$nextTick()
-    const emailStatus = sut.get('[data-test="email-status"]')
-    expect(emailStatus.attributes('title')).toBe('Tudo certo!')
-    expect(emailStatus.element.textContent).toBe('🟢')
+    simulateStatusForField(sut, 'email')
   })
 
   test('Should show valid password state if Validation success', async () => {
     const { sut } = makeSut()
     sut.setData({ password: faker.internet.password() })
     await sut.vm.$nextTick()
-    const passwordStatus = sut.get('[data-test="password-status"]')
-    expect(passwordStatus.attributes('title')).toBe('Tudo certo!')
-    expect(passwordStatus.element.textContent).toBe('🟢')
+    simulateStatusForField(sut, 'email')
   })
 
   test('Should enable submit button if form is valid', async () => {
@@ -100,10 +108,7 @@ describe('Login Component', () => {
 
   test('Should show spinner on submit', async () => {
     const { sut } = makeSut()
-    sut.setData({ email: faker.internet.email() })
-    sut.setData({ password: faker.internet.password() })
-    const button = sut.get('[data-test="submit"]')
-    button.trigger('click')
+    simulateValidSubmit(sut)
     await sut.vm.$nextTick()
     const spinner = sut.get('[data-test="spinner"]').element
     expect(spinner).toBeTruthy()
@@ -112,10 +117,8 @@ describe('Login Component', () => {
   test('Should call authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut()
     const email = faker.internet.email()
-    sut.setData({ email })
     const password = faker.internet.password()
-    sut.setData({ password })
-    sut.get('[data-test="submit"]').trigger('click')
+    simulateValidSubmit(sut, email, password)
     await sut.vm.$nextTick()
     expect(authenticationSpy.params).toEqual({
       email,
