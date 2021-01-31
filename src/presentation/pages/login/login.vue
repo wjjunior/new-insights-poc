@@ -87,6 +87,7 @@ export default {
           password: this.password
         })
         localStorage.setItem('accessToken', account.accessToken)
+        this.$router.push('/')
       } catch (error) {
         this.$store.commit('Auth/SET_LOADING', false)
         this.$store.commit('Auth/SET_ERROR_MESSAGE', error.message)
