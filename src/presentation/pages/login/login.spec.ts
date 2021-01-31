@@ -1,5 +1,5 @@
 import { mount, VueWrapper } from '@vue/test-utils'
-
+import faker from 'faker'
 import Login from './login.vue'
 import { store } from '@/presentation/store'
 import { ValidationSpy } from '@/presentation/test'
@@ -44,17 +44,19 @@ describe('Login Component', () => {
 
   test('Should call validation with correct email', async () => {
     const { sut, validationSpy } = makeSut()
-    sut.setData({ email: 'any_email' })
+    const email = faker.internet.email()
+    sut.setData({ email })
     await sut.vm.$nextTick()
     expect(validationSpy.fieldName).toEqual('email')
-    expect(validationSpy.fieldValue).toEqual('any_email')
+    expect(validationSpy.fieldValue).toEqual(email)
   })
 
   test('Should call validation with correct password', async () => {
     const { sut, validationSpy } = makeSut()
-    sut.setData({ password: 'any_password' })
+    const password = faker.internet.password()
+    sut.setData({ password })
     await sut.vm.$nextTick()
     expect(validationSpy.fieldName).toEqual('password')
-    expect(validationSpy.fieldValue).toEqual('any_password')
+    expect(validationSpy.fieldValue).toEqual(password)
   })
 })
