@@ -82,8 +82,11 @@ export default {
     }
   },
   watch: {
-    email: function (value: string): void {
-      this.validation.validate({ email: value })
+    email: function (email: string): void {
+      this.validation.validate({ email })
+    },
+    password: function (password: string): void {
+      this.validation.validate({ password })
     }
   }
 }
