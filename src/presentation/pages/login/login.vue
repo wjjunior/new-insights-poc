@@ -46,7 +46,6 @@ import {
 } from '@/presentation/components'
 import { Validation } from '@/presentation/protocols/validation'
 import { Authentication } from '@/domain/usecases'
-import { mapGetters } from 'vuex'
 
 type dataParams = {
   email: string;

@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import Login from '@/presentation/pages/login/login.vue'
+import { makeLogin } from '@/main/factories/pages'
 import App from '@/main/App.vue'
 
 const routes = [
@@ -11,7 +11,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: makeLogin
   }
 ]
 
