@@ -1,11 +1,15 @@
-import { SetStorage } from '../protocols/cache/set-storage'
+import { Storage } from '../protocols/cache/storage'
 
-export class SetStorageMock implements SetStorage {
+export class StorageMock implements Storage {
     key: string
     value: any
 
     async set (key: string, value: any): Promise<void> {
       this.key = key
+      this.value = value
+    }
+
+    async get (key: string, value: any): Promise<void> {
       this.value = value
     }
 }

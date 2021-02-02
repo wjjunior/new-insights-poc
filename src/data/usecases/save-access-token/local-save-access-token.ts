@@ -1,8 +1,8 @@
-import { SetStorage } from '@/data/protocols/cache/set-storage'
+import { Storage } from '@/data/protocols/cache/storage'
 import { SaveAccessToken } from '@/domain/usecases/save-access-token'
 
-export const makeLocalSaveAccessToken = (setStorage: SetStorage): SaveAccessToken => ({
+export const makeLocalSaveAccessToken = (storage: Storage): SaveAccessToken => ({
   save: async (accessToken: string): Promise<void> => {
-    await setStorage.set('accessToken', accessToken)
+    await storage.set('accessToken', accessToken)
   }
 })
