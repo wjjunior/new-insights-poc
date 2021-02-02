@@ -45,7 +45,7 @@ import {
   FormStatus
 } from '@/presentation/components'
 import { Validation } from '@/presentation/protocols/validation'
-import { Authentication } from '@/domain/usecases'
+import { Authentication, SaveAccessToken } from '@/domain/usecases'
 
 type dataParams = {
   email: string;
@@ -72,6 +72,9 @@ export default {
     },
     authentication: {
       type: Object as () => Authentication
+    },
+    saveAccessToken: {
+      type: Object as () => SaveAccessToken
     }
   },
   methods: {
@@ -85,7 +88,7 @@ export default {
           email: this.email,
           password: this.password
         })
-        localStorage.setItem('accessToken', account.accessToken)
+        await this.saveAccessToken.save(account.accessToken)
         this.$router.push('/')
       } catch (error) {
         this.$store.commit('Auth/SET_LOADING', false)
