@@ -1,34 +1,20 @@
-import { FieldValidation } from '@/validation/protocols/field-validation'
-import { RequiredFieldValidation } from '@/validation/validators'
-import { EmailValidation } from '../email/email-validation'
-import { MinLengthValidation } from '../min-length/min-length-validation'
+import { FieldValidation, ValidationBuilder } from '@/validation/protocols'
+import { requiredFieldValidation, emailValidation, minLengthValidation } from '@/validation/validators'
 
-export class ValidationBuilder {
-  private constructor (
-      private readonly fieldName: string,
-      private readonly validations: FieldValidation[]
-  ) {}
-
-  static field (fieldName: string): ValidationBuilder {
-    return new ValidationBuilder(fieldName, [])
+export const makeValidationBuilder = (fieldName: string, validations: FieldValidation[] = []): ValidationBuilder => ({
+  required: (): ValidationBuilder => {
+    validations.push(requiredFieldValidation(fieldName))
+    return makeValidationBuilder(fieldName, validations)
+  },
+  email: (): ValidationBuilder => {
+    validations.push(emailValidation(fieldName))
+    return makeValidationBuilder(fieldName, validations)
+  },
+  min: (length: number): ValidationBuilder => {
+    validations.push(minLengthValidation(fieldName, length))
+    return makeValidationBuilder(fieldName, validations)
+  },
+  build: (): FieldValidation[] => {
+    return validations
   }
-
-  required (): ValidationBuilder {
-    this.validations.push(new RequiredFieldValidation(this.fieldName))
-    return this
-  }
-
-  email (): ValidationBuilder {
-    this.validations.push(new EmailValidation(this.fieldName))
-    return this
-  }
-
-  min (length: number): ValidationBuilder {
-    this.validations.push(new MinLengthValidation(this.fieldName, length))
-    return this
-  }
-
-  build (): FieldValidation[] {
-    return this.validations
-  }
-}
+})

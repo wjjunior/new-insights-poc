@@ -1,10 +1,11 @@
 import { FieldValidation } from '@/validation/protocols/field-validation'
 
-export class FieldValidationSpy implements FieldValidation {
-  error: Error = null;
-  constructor (readonly field: string) {}
-
-  validate (value: string): Error {
-    return this.error
+export const makeFieldValidationSpy = (field: string, error: Error = null): FieldValidation => ({
+  field,
+  validate: (value: string): Error => {
+    return error
+  },
+  setError: (value: Error): void => {
+    error = value
   }
-}
+})

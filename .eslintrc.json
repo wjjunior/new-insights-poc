@@ -18,17 +18,5 @@
     "createDefaultProgram": true
   },
   "rules": {
-    "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/no-floating-promises": "off",
-    "@typescript-eslint/comma-spacing": "off",
-    "@typescript-eslint/return-await": "off",
-    "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/camelcase": "off",
-    "no-redeclare": "off",
-    "import/export": "off",
-    "vue/jsx-uses-vars": "error",
-    "no-useless-constructor": "off",
-    "@typescript-eslint/no-useless-constructor": ["error"]
   }
 }

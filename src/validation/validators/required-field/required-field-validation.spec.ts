@@ -1,8 +1,9 @@
 import { RequiredFieldError } from '@/validation/errors'
-import { RequiredFieldValidation } from '@/validation/validators/required-field/required-field-validation'
+import { FieldValidation } from '@/validation/protocols'
+import { requiredFieldValidation } from '@/validation/validators/required-field/required-field-validation'
 import faker from 'faker'
 
-const makeSut = (): RequiredFieldValidation => new RequiredFieldValidation(faker.database.column())
+const makeSut = (): FieldValidation => requiredFieldValidation(faker.database.column())
 describe('RequiredFieldValidation', () => {
   test('Should return error if field is empty', () => {
     const sut = makeSut()
