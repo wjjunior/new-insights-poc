@@ -5,7 +5,7 @@ import { store } from '@/presentation/store'
 import { ValidationStub, AuthenticationSpy, AccessTokenMock } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
 import { InvalidCredentialsError } from '@/domain/errors'
-import { Router as router, Login } from '@/presentation/pages'
+import { Router, Login } from '@/presentation/pages'
 
 type SutTypes = {
   sut: VueWrapper<ComponentPublicInstance>;
@@ -29,7 +29,7 @@ const makeSut = (params?: SutParams): SutTypes => {
       accessToken: accessTokenMock
     },
     global: {
-      plugins: [store, router]
+      plugins: [store, Router]
     }
   })
   return {

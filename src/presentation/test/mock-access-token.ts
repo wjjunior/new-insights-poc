@@ -6,7 +6,7 @@ export class AccessTokenMock implements AccessToken {
     this.accessToken = accessToken
   }
 
-  async get (value: string): Promise<void> {
-    this.accessToken = value
+  async get (): Promise<string | null | void> {
+    return this.accessToken
   }
 }

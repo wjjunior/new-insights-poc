@@ -1,4 +1,4 @@
-import { makeLocalSaveAccessToken } from './local-access-token'
+import { makeLocalAccessToken } from './local-access-token'
 import { StorageMock } from '@/data/test/mock-storage'
 import faker from 'faker'
 import { AccessToken } from '@/domain/usecases/access-token'
@@ -10,7 +10,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const storageMock = new StorageMock()
-  const sut = makeLocalSaveAccessToken(storageMock)
+  const sut = makeLocalAccessToken(storageMock)
   return {
     sut,
     storageMock
@@ -34,16 +34,16 @@ describe('LocalSaveAccessToken', () => {
   })
   test('Should call Storage get with correct values', async () => {
     const { sut, storageMock } = makeSut()
-    const key = faker.database.column()
     const accessToken = faker.random.uuid()
-    await sut.get(key, accessToken)
-    expect(storageMock.value).toBe(accessToken)
+    storageMock.value = accessToken
+    const getToken = await sut.get()
+    expect(getToken).toBe(accessToken)
   })
 
   test('Should throw if Storage get throws', async () => {
     const { sut, storageMock } = makeSut()
     jest.spyOn(storageMock, 'get').mockRejectedValueOnce(new Error())
-    const promise = sut.get(faker.random.uuid())
+    const promise = sut.get()
     await expect(promise).rejects.toThrow(new Error())
   })
 })

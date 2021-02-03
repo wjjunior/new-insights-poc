@@ -9,7 +9,7 @@ export class StorageMock implements Storage {
       this.value = value
     }
 
-    async get (key: string, value: any): Promise<void> {
-      this.value = value
+    async get (key: string): Promise<string | void> {
+      return this.value
     }
 }
