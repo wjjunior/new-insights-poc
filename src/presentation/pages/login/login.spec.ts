@@ -2,7 +2,7 @@ import { mount, VueWrapper } from '@vue/test-utils'
 import faker from 'faker'
 import flushPromises from 'flush-promises'
 import { store } from '@/presentation/store'
-import { ValidationStub, AuthenticationSpy, SaveAccessTokenMock } from '@/presentation/test'
+import { ValidationStub, AuthenticationSpy, AccessTokenMock } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { Router as router, Login } from '@/presentation/pages'
@@ -10,7 +10,7 @@ import { Router as router, Login } from '@/presentation/pages'
 type SutTypes = {
   sut: VueWrapper<ComponentPublicInstance>;
   authenticationSpy: AuthenticationSpy;
-  saveAccessTokenMock: SaveAccessTokenMock
+  saveAccessTokenMock: AccessTokenMock
 };
 
 type SutParams = {
@@ -20,7 +20,7 @@ type SutParams = {
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const saveAccessTokenMock = new AccessTokenMock()
   validationStub.errorMessage = params?.validationError
   const sut = mount(Login, {
     props: {

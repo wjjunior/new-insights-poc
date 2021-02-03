@@ -1,7 +1,7 @@
-import { makeLocalSaveAccessToken } from '@/data/usecases/save-access-token/local-save-access-token'
-import { SaveAccessToken } from '@/domain/usecases'
+import { makeLocalSaveAccessToken } from '@/data/usecases/access-token/local-access-token'
+import { AccessToken } from '@/domain/usecases'
 import { makeLocalStorageAdapter } from '@/main/factories/cache/local-storage-adapter-factory'
 
-export const makeLocalSaveAccessTokenFactory = (): SaveAccessToken => {
+export const makeLocalSaveAccessTokenFactory = (): AccessToken => {
   return makeLocalSaveAccessToken(makeLocalStorageAdapter())
 }
