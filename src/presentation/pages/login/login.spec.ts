@@ -10,7 +10,7 @@ import { Router as router, Login } from '@/presentation/pages'
 type SutTypes = {
   sut: VueWrapper<ComponentPublicInstance>;
   authenticationSpy: AuthenticationSpy;
-  saveAccessTokenMock: AccessTokenMock
+  accessTokenMock: AccessTokenMock
 };
 
 type SutParams = {
@@ -20,13 +20,13 @@ type SutParams = {
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const saveAccessTokenMock = new AccessTokenMock()
+  const accessTokenMock = new AccessTokenMock()
   validationStub.errorMessage = params?.validationError
   const sut = mount(Login, {
     props: {
       validation: validationStub,
       authentication: authenticationSpy,
-      accessToken: saveAccessTokenMock
+      accessToken: accessTokenMock
     },
     global: {
       plugins: [store, router]
@@ -35,7 +35,7 @@ const makeSut = (params?: SutParams): SutTypes => {
   return {
     sut,
     authenticationSpy,
-    saveAccessTokenMock
+    accessTokenMock
   }
 }
 
@@ -192,19 +192,19 @@ describe('Login Component', () => {
     testErrorWrapChildCount(sut, 1)
   })
 
-  test('Should call SaveAccessToken on success', async () => {
-    const { sut, authenticationSpy, saveAccessTokenMock } = makeSut()
+  test('Should call save AccessToken on success', async () => {
+    const { sut, authenticationSpy, accessTokenMock } = makeSut()
     await simulateValidSubmit(sut)
     await flushPromises()
-    expect(saveAccessTokenMock.accessToken).toBe(authenticationSpy.account.accessToken)
+    expect(accessTokenMock.accessToken).toBe(authenticationSpy.account.accessToken)
     expect(sut.vm.$route.path).toBe('/')
   })
 
-  test('Should show error if SaveAccessToken fails', async () => {
-    const { sut, saveAccessTokenMock } = makeSut()
+  test('Should show error if save AccessToken fails', async () => {
+    const { sut, accessTokenMock } = makeSut()
     const error = new InvalidCredentialsError()
     jest
-      .spyOn(saveAccessTokenMock, 'save')
+      .spyOn(accessTokenMock, 'save')
       .mockReturnValueOnce(Promise.reject(error))
     await simulateValidSubmit(sut)
     await flushPromises()

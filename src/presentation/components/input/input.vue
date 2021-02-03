@@ -8,7 +8,6 @@
       :value="value"
       :class="state"
       :placeholder="placeholder"
-      :onFocus="() => (readonly = false)"
       :readonly="readonly"
       @input="onInput($event.target.value)"
       @focus="onFocus($event.target.value)"
@@ -78,10 +77,8 @@ export default defineComponent({
       this.$emit('update:value', value)
     },
     onFocus (value: any) {
+      this.readonly = false
       this.$emit('focus', value)
-    },
-    enableInput (event: any) {
-      event.target.readonly = false
     }
   },
   computed: {

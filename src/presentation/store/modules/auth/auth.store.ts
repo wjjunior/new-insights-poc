@@ -67,11 +67,8 @@ type Actions = {
 
     }
   ): void;
-  [ActionTypes.Reset](context: ActionAugments): void;
 };
 
-const sleep = async (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms))
 const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.Login] ({ commit }, { credentials, authentication, accessToken }) {
     try {
@@ -89,10 +86,6 @@ const actions: ActionTree<State, State> & Actions = {
       commit(MutationType.SetLoading, false)
       commit(MutationType.SetErrorMessage, error.message)
     }
-  },
-
-  async [ActionTypes.Reset] ({ commit }) {
-    commit(MutationType.Reset)
   }
 }
 

@@ -1,6 +1,11 @@
 module.exports = {
   roots: ['<rootDir>/src'],
-  collectCoverageFrom: ['<rootDir>/src/**/*.{ts,vue}', '!<rootDir>/src/main/**/*', '!**/*.d.ts'],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.{ts,vue}',
+    '!<rootDir>/src/main/**/*',
+    '!<rootDir>/src/**/index.ts',
+    '!**/*.d.ts'
+  ],
   coverageDirectory: 'coverage',
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['js', 'ts', 'json', 'vue'],
