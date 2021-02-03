@@ -1,6 +1,7 @@
 import {
   module as Auth,
-  ActionTypes as AuthActionTypes
+  ActionTypes as AuthActionTypes,
+  GetterTypes as AuthGetterTypers
 } from './auth/auth.store'
 
 const mapType = (moduleName: string, obj: Record<string, unknown>): Record<string, unknown> => {
@@ -13,6 +14,10 @@ const mapType = (moduleName: string, obj: Record<string, unknown>): Record<strin
 
 export const ActionTypes = {
   ...mapType('Auth', AuthActionTypes)
+}
+
+export const GetterTypes = {
+  ...mapType('Auth', AuthGetterTypers)
 }
 
 export const modules = {

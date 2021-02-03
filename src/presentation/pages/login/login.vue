@@ -100,7 +100,13 @@ export default {
     },
     isLoading (): boolean {
       return this.$store.state.Auth.isLoading
+    },
+    isAuthenticated (): boolean {
+      return this.$store.state.Auth.isAuthenticated
     }
+  },
+  created (): void {
+    this.isAuthenticated && this.$router.push('/')
   }
 }
 </script>

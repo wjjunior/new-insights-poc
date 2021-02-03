@@ -1,21 +1,19 @@
-import { createWebHistory, createRouter } from 'vue-router'
-import { makeLogin } from '@/main/factories/pages'
-// import { store } from '@/presentation/store'
-import App from '@/main/App.vue'
+import { createWebHistory, createRouter, RouteRecordRaw } from 'vue-router'
+import { makeLogin, makeHome } from '@/main/factories/pages'
+import { store } from '@/presentation/store'
+import { GetterTypes } from '@/presentation/store/modules'
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: App
+    component: makeHome,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
     name: 'Login',
-    component: makeLogin,
-    meta: {
-      allowAnonymous: true
-    }
+    component: makeLogin
   }
 ]
 
@@ -24,16 +22,17 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.allowAnonymous)) {
-//     if (store.getters.isAuthenticated) {
-//       next()
-//       return
-//     }
-//     next('/login')
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters[GetterTypes.isAuthenticated as string]) {
+      next()
+      return
+    }
+
+    next('/login')
+  } else {
+    next()
+  }
+})
 
 export default router
