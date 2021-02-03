@@ -1,11 +1,10 @@
-import { mount, VueWrapper } from '@vue/test-utils'
+import { mount, VueWrapper, flushPromises } from '@vue/test-utils'
 import faker from 'faker'
-import flushPromises from 'flush-promises'
 import { store } from '@/presentation/store'
 import { ValidationStub, AuthenticationSpy, AccessTokenMock } from '@/presentation/test'
 import { ComponentPublicInstance } from 'vue'
 import { InvalidCredentialsError } from '@/domain/errors'
-import { Router, Login } from '@/presentation/pages'
+import { Router as router, Login } from '@/presentation/pages'
 
 type SutTypes = {
   sut: VueWrapper<ComponentPublicInstance>;
@@ -29,7 +28,7 @@ const makeSut = (params?: SutParams): SutTypes => {
       accessToken: accessTokenMock
     },
     global: {
-      plugins: [store, Router]
+      plugins: [store, router]
     }
   })
   return {
@@ -101,7 +100,7 @@ describe('Login Component', () => {
   beforeEach(() => {
     store.dispatch('reset')
   })
-  test('Should start with initial state', () => {
+  test('Should start with initial state', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
     testErrorWrapChildCount(sut, 0)
@@ -187,7 +186,6 @@ describe('Login Component', () => {
       .mockReturnValueOnce(Promise.reject(error))
     await simulateValidSubmit(sut)
     await flushPromises()
-    sut.get('[data-test="submit"]').trigger('click')
     testElementText(sut, 'main-error', error.message)
     testErrorWrapChildCount(sut, 1)
   })
@@ -208,8 +206,18 @@ describe('Login Component', () => {
       .mockReturnValueOnce(Promise.reject(error))
     await simulateValidSubmit(sut)
     await flushPromises()
-    sut.get('[data-test="submit"]').trigger('click')
     testElementText(sut, 'main-error', error.message)
     testErrorWrapChildCount(sut, 1)
+  })
+
+  test('Should should', async () => {
+    const { sut } = makeSut()
+    await simulateValidSubmit(sut)
+    await flushPromises()
+    router.push('/login')
+    await flushPromises()
+    Login.created.call(sut.vm)
+    await flushPromises()
+    expect(sut.vm.$route.path).toBe('/')
   })
 })
