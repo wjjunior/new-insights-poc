@@ -46,6 +46,7 @@ import {
 } from '@/presentation/components'
 import { Validation } from '@/presentation/protocols/validation'
 import { Authentication, AccessToken } from '@/domain/usecases'
+import { ActionTypes } from '@/presentation/store/modules'
 
 type dataParams = {
   email: string;
@@ -79,21 +80,15 @@ export default {
   },
   methods: {
     async handleSubmit (): Promise<void> {
-      try {
-        if (this.isLoading || this.emailError || this.passwordError) {
-          return
-        }
-        this.$store.commit('Auth/SET_LOADING', true)
-        const account = await this.authentication.auth({
-          email: this.email,
-          password: this.password
-        })
-        await this.accessToken.save(account.accessToken)
-        this.$router.push('/')
-      } catch (error) {
-        this.$store.commit('Auth/SET_LOADING', false)
-        this.$store.commit('Auth/SET_ERROR_MESSAGE', error.message)
+      if (this.isLoading || this.emailError || this.passwordError) {
+        return
       }
+      await this.$store.dispatch(ActionTypes.Login, {
+        credentials: { email: this.email, password: this.password },
+        authentication: this.authentication,
+        accessToken: this.accessToken
+      })
+      this.$router.push('/')
     }
   },
   computed: {

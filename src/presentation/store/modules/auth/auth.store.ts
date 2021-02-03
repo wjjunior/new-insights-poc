@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AccessToken, Authentication } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
 import { ActionContext, ActionTree, MutationTree, GetterTree } from 'vuex'
 
 type State = {
@@ -15,7 +18,7 @@ const state: State = initialState()
 enum MutationType {
   Reset = 'RESET',
   SetLoading = 'SET_LOADING',
-  SetErrorMessage = 'SET_ERROR_MESSAGE'
+  SetErrorMessage = 'SET_ERROR_MESSAGE',
 }
 
 type Mutations = {
@@ -39,13 +42,11 @@ const mutations: MutationTree<State> & Mutations = {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-enum ActionTypes {
+export enum ActionTypes {
   Login = 'LOGIN',
   Reset = 'RESET',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type ActionAugments = Omit<ActionContext<State, State>, 'commit'> & {
   commit<K extends keyof Mutations>(
     key: K,
@@ -56,7 +57,15 @@ type ActionAugments = Omit<ActionContext<State, State>, 'commit'> & {
 type Actions = {
   [ActionTypes.Login](
     context: ActionAugments,
-    credentials: { email: string; password: string }
+    params: {
+      credentials: {
+        email: string;
+        password: string;
+      };
+      authentication: Authentication;
+      accessToken: AccessToken
+
+    }
   ): void;
   [ActionTypes.Reset](context: ActionAugments): void;
 };
@@ -64,14 +73,24 @@ type Actions = {
 const sleep = async (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms))
 const actions: ActionTree<State, State> & Actions = {
-  async [ActionTypes.Login] (
-    { commit },
-    credentials: { email: string; password: string }
-  ) {
-    commit(MutationType.SetLoading, true)
-    await sleep(5000)
-    commit(MutationType.SetLoading, false)
+  async [ActionTypes.Login] ({ commit }, { credentials, authentication, accessToken }) {
+    try {
+      commit(MutationType.SetLoading, true)
+
+      const account = await authentication.auth({
+        email: credentials.email,
+        password: credentials.password
+      })
+
+      await accessToken.save((account as AccountModel).accessToken)
+
+      commit(MutationType.SetLoading, false)
+    } catch (error) {
+      commit(MutationType.SetLoading, false)
+      commit(MutationType.SetErrorMessage, error.message)
+    }
   },
+
   async [ActionTypes.Reset] ({ commit }) {
     commit(MutationType.Reset)
   }
@@ -81,7 +100,7 @@ type Getters = Record<string, unknown>;
 
 const getters: GetterTree<State, State> & Getters = {}
 
-export default {
+export const module = {
   namespaced: true,
   state,
   actions,
