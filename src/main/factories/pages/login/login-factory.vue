@@ -16,7 +16,7 @@ export default {
     return h(Login, {
       authentication: makeRemoteAuthenticationUrl(),
       validation: makeLoginValidation(),
-      saveAccessToken: makeLocalSaveAccessTokenFactory()
+      accessToken: makeLocalSaveAccessTokenFactory()
     })
   }
 }

@@ -26,7 +26,7 @@ const makeSut = (params?: SutParams): SutTypes => {
     props: {
       validation: validationStub,
       authentication: authenticationSpy,
-      saveAccessToken: saveAccessTokenMock
+      accessToken: saveAccessTokenMock
     },
     global: {
       plugins: [store, router]
