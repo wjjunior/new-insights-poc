@@ -2,7 +2,7 @@
   <div>
     <div class="login">
       <LoginHeader />
-      <form class="form">
+      <form class="form" data-test="login-form" @submit.prevent="handleSubmit">
         <h2>Login</h2>
         <Input
           type="email"
@@ -23,9 +23,8 @@
         <button
           data-test="submit"
           :disabled="!!emailError || !!passwordError"
-          type="button"
+          type="submit"
           class="submit"
-          @click="handleSubmit"
         >
           Entrar
         </button>
