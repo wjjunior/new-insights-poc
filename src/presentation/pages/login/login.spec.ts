@@ -45,7 +45,7 @@ const simulateValidSubmit = async (
 ): Promise<void> => {
   sut.setData({ email })
   sut.setData({ password })
-  sut.get('[data-test="submit"]').trigger('click')
+  sut.get('[data-test="login-form"]').trigger('submit.prevent')
   await sut.vm.$nextTick()
 }
 
